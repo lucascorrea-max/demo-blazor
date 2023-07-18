@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode"
+    Theme="@_appTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<CascadingValue Value="this">
+    <PageTitle>@Title | Blazor Demo</PageTitle>
+
+    <MudLayout>
+        <AuthorizeView>
+            <Authorized>
+                <NavigationLayout Title="@Title"
+                    IsDarkMode="@_isDarkMode"
+                    OnToggleTheme="_toggleTheme">
+                    @Body
+                </NavigationLayout>
+            </Authorized>
+            <NotAuthorized>
+                <EmptyLayout>
+                    @Body
+                </EmptyLayout>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudLayout>
+</CascadingValue>
+
+@code {
+    private string? _title = "maxGestão";
+    private bool _isDarkMode;
+    private MudTheme _appTheme = new CustomTheme().AppTheme;
+    private void _toggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+        StateHasChanged();
+    }
+
+    public string? Title
+    {
+        get => _title;
+        set
+        {
+            _title = value;
+            StateHasChanged();
+        }
+    }
+}

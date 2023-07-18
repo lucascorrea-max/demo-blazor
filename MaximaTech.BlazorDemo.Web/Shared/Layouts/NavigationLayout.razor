@@ -1,0 +1,80 @@
+@inject NavigationManager NavigationManager
+@inject IAuthService AuthService
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.Menu"
+        Color="Color.Inherit"
+        Edge="Edge.Start"
+        OnClick="@((e) => _toggleDrawer())" />
+    <MudText Typo="Typo.body1"
+        Style="line-height: normal; margin: .9px 4px 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        @Title
+    </MudText>
+    <MudSpacer />
+    <MudTooltip Text=@("Trocar para tema" + (IsDarkMode ? "claro" : "escuro"))>
+        <MudIconButton OnClick="_toggleTheme" Icon="@(IsDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+            Color="Color.Inherit" />
+    </MudTooltip>
+    <MudTooltip Text="Filtrar">
+        <MudIconButton Icon="@Icons.Material.Filled.FilterList"
+            Color="Color.Inherit" />
+    </MudTooltip>
+    <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+        AnchorOrigin="Origin.BottomCenter"
+        TransformOrigin="Origin.TopRight"
+        Color="Color.Inherit">
+        <MudMenuItem Icon="@Icons.Material.Filled.Logout"
+            OnTouch="logout"
+            OnClick="logout">
+            Sair
+        </MudMenuItem>
+    </MudMenu>
+</MudAppBar>
+<MudDrawer @bind-Open="@_drawerOpen">
+    <NavMenu />
+</MudDrawer>
+<MudMainContent Style="height: 100vh;">
+    <MudContainer Class="py-6"
+        MaxWidth="MaxWidth.False">
+        @ChildContent
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Usuario { get; set; }
+
+    [Parameter]
+    public string? Email { get; set; }
+
+    [Parameter]
+    public string? Versao { get; set; }
+
+    [Parameter]
+    public bool IsDarkMode { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnToggleTheme { get; set; }
+    private async Task _toggleTheme()
+    {
+        await OnToggleTheme.InvokeAsync();
+    }
+
+    private bool _drawerOpen = true;
+
+    private void _toggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private async void logout() {
+        await AuthService.Logout();
+        NavigationManager.NavigateTo("/login");
+    }
+}

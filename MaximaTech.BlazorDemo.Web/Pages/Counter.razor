@@ -1,0 +1,29 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<MudButton @onclick="IncrementCount"
+    Variant="Variant.Filled"
+    Color="Color.Primary">Increment</MudButton>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    [CascadingParameter]
+    public MainLayout? Layout { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Layout is not null)
+            Layout.Title = "Counter";
+
+        base.OnInitialized();
+    }
+}

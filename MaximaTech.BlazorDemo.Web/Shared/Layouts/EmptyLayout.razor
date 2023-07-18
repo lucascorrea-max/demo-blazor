@@ -1,0 +1,12 @@
+<MudPaper Height="100vh"
+    Elevation="0"
+    Width="100%">
+    <MudContainer MaxWidth="MaxWidth.False">
+        @ChildContent
+    </MudContainer>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

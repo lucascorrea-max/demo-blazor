@@ -1,0 +1,10 @@
+.vs/
+bin/
+obj/
+*.user
+artifacts/
+.dotnet/
+*.binlog
+/node_modules
+/wwwroot/node_modules
+auth.md

@@ -1,0 +1,133 @@
+@page "/login"
+@attribute [AllowAnonymous]
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ApiAuthenticationStateProvider AuthState
+
+<MudGrid Spacing="2"
+    Style="height: 100vh; text-align: center;"
+    Class="flex-column align-center justify-center">
+    @if (showErrors)
+    {
+        <MudItem>
+            <MudAlert Severity="Severity.Error">@errorMessage</MudAlert>
+        </MudItem>
+    }
+    <MudItem>
+        <img loading="eager"
+            width="260"
+            src="/images/logo-maximatech-vertical.webp">
+        <MudText Typo="Typo.h3"
+            Class="mt-n1">maxGestão</MudText>
+    </MudItem>
+    <MudItem>
+        <MudText Typo="Typo.h3">Faça login</MudText>
+    </MudItem>
+    <MudItem Style="width: 100%; max-width: 400px">
+        <EditForm Model="@loginModel"
+            OnValidSubmit="handleLogin">
+            <DataAnnotationsValidator />
+
+            <MudTextField @bind-Value="@loginModel.Login"
+                Variant="Variant.Filled"
+                id="login"
+                Label="Login"
+                For="@(() => loginModel.Login)"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Outlined.Person" />
+            <MudTextField @bind-Value="@loginModel.Password"
+                Variant="Variant.Filled"
+                id="password"
+                For="@(() => loginModel.Password)"
+                InputType="@passwordInputType"
+                Adornment="Adornment.End"
+                AdornmentIcon="@passwordInputIcon"
+                OnAdornmentClick="showPassword"
+                AdornmentAriaLabel="Ver senha"
+                Label="Senha" />
+            <MudButton ButtonType="ButtonType.Submit"
+                Variant="Variant.Filled"
+                Disabled="loading"
+                Color="Color.Secondary"
+                Class="my-6 rounded-xl"
+                EndIcon="@(loading ? "" : Icons.Material.Outlined.KeyboardArrowRight)">
+                <MudText Typo="Typo.button"
+                    Class="my-1">Entrar</MudText>
+                @if (loading)
+                {
+                    <MudProgressCircular Class="ml-2"
+                        Size="Size.Small"
+                        Indeterminate="true" />
+                }
+            </MudButton>
+        </EditForm>
+    </MudItem>
+    <MudItem>
+        <MudLink Typo="Typo.subtitle1"
+            Href="https://maximatech.com.br/"
+            Target="_blank"
+            Style="color: var(--mud-palette-grey-default)"
+            Color="Color.Default"
+            Underline="Underline.None">
+            maximatech.com.br
+        </MudLink>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private bool showErrors;
+    private bool loading;
+    private string errorMessage = "";
+    private InputType passwordInputType = InputType.Password;
+    private string passwordInputIcon = Icons.Material.Outlined.VisibilityOff;
+    private LoginResult? loginResult;
+
+    protected override async void OnInitialized()
+    {
+        var authState = await AuthState.GetAuthenticationStateAsync();
+        if (authState.User.Identity != null && authState.User.Identity.IsAuthenticated)
+            NavigationManager.NavigateTo("/");
+    }
+
+    private async Task handleLogin()
+    {
+        showErrors = false;
+        loading = true;
+        try
+        {
+            loginResult = await AuthService.Login(loginModel);
+            if (loginResult.Success)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                throw new Exception("Falha ao realizar login, tente novamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+            showErrors = true;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private void showPassword()
+    {
+        if (passwordInputType == InputType.Password)
+        {
+            passwordInputIcon = Icons.Material.Outlined.VisibilityOff;
+            passwordInputType = InputType.Text;
+        }
+        else
+        {
+            passwordInputIcon = Icons.Material.Outlined.Visibility;
+            passwordInputType = InputType.Password;
+        }
+    }
+}

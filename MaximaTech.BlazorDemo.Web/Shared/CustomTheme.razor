@@ -1,0 +1,107 @@
+@code {
+    public MudTheme AppTheme { get; private set; }
+
+    public CustomTheme()
+    {
+        AppTheme = new MudTheme();
+        AddCustomLightPalette();
+        AddCustomDarkPalette();
+        AddCustomTypography();
+    }
+
+    private void AddCustomLightPalette()
+    {
+        AppTheme.Palette = new PaletteLight
+            {
+                Primary = "#002A4E",
+                PrimaryLighten = "#37527A",
+                PrimaryDarken = "#000026",
+
+                Secondary = "#638736",
+                SecondaryDarken = "#476a22",
+                SecondaryLighten = "#d0dbc2",
+
+                Tertiary = "#e5bf0b",
+                TertiaryDarken = "#725f05",
+                TertiaryLighten = "#f8e37e",
+
+                AppbarBackground = "#002a4e"
+            };
+    }
+
+    private void AddCustomDarkPalette()
+    {
+        AppTheme.PaletteDark = new PaletteDark
+            {
+                Primary = "#37527A",
+                PrimaryLighten = "#243e60",
+                PrimaryDarken = "#002A4E",
+
+                Secondary = "#638736",
+                SecondaryDarken = "#476a22",
+                SecondaryLighten = "#d0dbc2",
+
+                Tertiary = "#e5bf0b",
+                TertiaryDarken = "#725f05",
+                TertiaryLighten = "#f8e37e",
+
+                Background = "#1B1B1B",
+
+                DrawerBackground = "#1F1F1F",
+                DrawerText = "#f2f2f2",
+                DrawerIcon = "#f2f2f27f",
+
+                AppbarBackground = "#002A4E",
+                AppbarText = "#f2f2f2",
+            };
+    }
+
+    private void AddCustomTypography()
+    {
+        AppTheme.Typography = new Typography()
+            {
+                Subtitle1 = new Subtitle1()
+                {
+                    FontSize = ".85rem"
+                },
+                Subtitle2 = new Subtitle2()
+                {
+                    FontSize = ".85rem"
+                },
+                Body2 = new Body2()
+                {
+                    FontSize = ".95rem"
+                },
+                H1 = new H1()
+                {
+                    FontSize = "1.5rem",
+                    FontWeight = 400
+                },
+                H2 = new H2()
+                {
+                    FontSize = "1.3rem",
+                    FontWeight = 400
+                },
+                H3 = new H3()
+                {
+                    FontSize = "1.15rem",
+                    FontWeight = 400
+                },
+                H4 = new H4()
+                {
+                    FontSize = "1.5rem",
+                    FontWeight = 300
+                },
+                H5 = new H5()
+                {
+                    FontSize = "1.3rem",
+                    FontWeight = 300
+                },
+                H6 = new H6()
+                {
+                    FontSize = "1.15rem",
+                    FontWeight = 300
+                }
+            };
+    }
+}
